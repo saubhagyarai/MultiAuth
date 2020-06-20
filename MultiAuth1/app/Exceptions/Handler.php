@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
 
 
 
-    
+
     /**
      * Convert an authentication exception into a response.
      *
@@ -69,24 +69,23 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
 
+        // Pull the guard  from $exception
         $guard = Arr::get($exception->guards(), 0);
         // dd($guard);
-        
+
         switch ($guard) {
             case 'admin':
                 $redirect = route('admin.login');
-            break;
+                break;
 
             default:
                 $redirect = route('login');
-        break;
+                break;
         }
-        
+
         return $request->expectsJson()
 
-                    ? response()->json(['message' => $exception->getMessage()], 401)
-                    : redirect()->guest($redirect);
-
-
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest($redirect);
     }
 }
